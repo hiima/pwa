@@ -17,17 +17,17 @@ const manifest: Partial<VitePWAOptions> = {
     description: 'Oak is the pwa test app.',
     icons: [
       {
-        src: 'app_icon/icon-192.png',
+        src: '/app_icon/icon-192.png',
         type: 'image/png',
         sizes: '192x192',
       },
       {
-        src: 'app_icon/icon-512.png',
+        src: '/app_icon/icon-512.png',
         sizes: '512x512',
         type: 'image/png',
       },
       {
-        src: 'app_icon/icon-512.png',
+        src: '/app_icon/icon-512.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any maskable',
