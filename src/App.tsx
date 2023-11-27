@@ -18,8 +18,8 @@ function App() {
         setInterval(async () => {
           if (!(!registration.installing && navigator)) return;
           if ("connection" in navigator && !navigator.onLine) return;
-          console.log({ swUrl });
-          registration.update();
+          console.log("check update...");
+          registration.update(); // 更新があれば needRefresh が　true になる
         }, intervalMS);
       }
     },
@@ -28,17 +28,18 @@ function App() {
     },
   });
 
-  const handleOk = () => {
-    updateServiceWorker(true);
-    // needRefresh が false にならない
-    // タブをリロードする必要がありそう
+  const handleOk = async () => {
+    await updateServiceWorker(true);
+    window.location.reload();
   };
 
   return (
     <>
       <p>current version is `{import.meta.env.VITE_VERSION ?? "undefined"}`</p>
       <p>{message}</p>
-      {needRefresh && <button onClick={handleOk}>更新してください</button>}
+      {needRefresh && (
+        <button onClick={handleOk}>ここをクリックして更新してください</button>
+      )}
     </>
   );
 }
