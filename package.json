@@ -5,14 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "export VITE_VERSION=$(date +\"%Y%m%d_%H%M%S\"); tsc && vite build",
+    "build": "tsc && TZ=Asia/Tokyo VITE_VERSION=$(date +\"%Y%m%d_%H%M%S\") vite build",
     "deploy": "pnpm build && vercel --prod",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "nr build && vite preview"
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "register-service-worker": "^1.7.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

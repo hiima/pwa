@@ -4,9 +4,10 @@ import react from '@vitejs/plugin-react-swc';
 
 const manifest: Partial<VitePWAOptions> = {
   injectRegister: 'auto',
-  registerType: 'autoUpdate',
+  registerType: 'prompt',
   workbox: {
     mode: 'injectManifest',
+    globPatterns: ['**/*.{js,css,html,svg}'],
   },
   devOptions: {
     enabled: false,
