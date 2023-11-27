@@ -19,7 +19,10 @@ function App() {
           if (!(!registration.installing && navigator)) return;
           if ("connection" in navigator && !navigator.onLine) return;
           console.log("check update...");
-          registration.update(); // 更新があれば needRefresh が　true になる
+
+          // 更新があれば needRefresh が　true になる
+          // 更新がある = ワーカーのスクリプト URL を読み取り、新しいワーカーが現在のワーカーとバイト単位で同一でないと判定される
+          registration.update();
         }, intervalMS);
       }
     },
