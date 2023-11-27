@@ -11,15 +11,15 @@ function App() {
     needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegisteredSW(swUrl, r) {
+    onRegisteredSW(swUrl, registration) {
       setMessage(`SW registration success ${swUrl}`);
-      if (r) {
+      if (registration) {
         // 一定間隔でサービスワーカーファイルの更新をチェックする
         setInterval(async () => {
-          if (!(!r.installing && navigator)) return;
+          if (!(!registration.installing && navigator)) return;
           if ("connection" in navigator && !navigator.onLine) return;
           console.log({ swUrl });
-          r.update();
+          registration.update();
         }, intervalMS);
       }
     },
@@ -30,6 +30,8 @@ function App() {
 
   const handleOk = () => {
     updateServiceWorker(true);
+    // needRefresh が false にならない
+    // タブをリロードする必要がありそう
   };
 
   return (
