@@ -4,19 +4,19 @@ import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
 const distDir = path.join(process.cwd(), 'dist');
-const swDest = path.join(distDir, 'serviceWorker.js'); // これで FCM の sw.js と被らない
+const swDest = path.join(distDir, 'sw.js');
 const cacheId = 'oak-app';
 
 const manifest: Partial<VitePWAOptions> = {
   injectRegister: 'auto',
   registerType: 'prompt',
-  filename: 'serviceWorker.js',
   workbox: {
     mode: 'injectManifest',
     globDirectory: './dist/',
     globPatterns: [],
     // https://qiita.com/masato_makino/items/c85cb01d52632da42c03
     skipWaiting: true,
+    clientsClaim: true,
     cacheId,
     swDest,
     importScripts: ['firebase-messaging-sw.js'], // 追加のスクリプト (通知イベントハンドラーとか) を読む
