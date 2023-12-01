@@ -10,6 +10,7 @@ const cacheId = 'oak-app';
 const manifest: Partial<VitePWAOptions> = {
   injectRegister: 'auto',
   registerType: 'prompt',
+  filename: 'serviceWorker.js',
   workbox: {
     mode: 'injectManifest',
     globDirectory: './dist/',
@@ -18,17 +19,11 @@ const manifest: Partial<VitePWAOptions> = {
     skipWaiting: true,
     cacheId,
     swDest,
-    importScripts: [path.join(distDir, 'firebase-messaging-sw.js')],
+    importScripts: ['firebase-messaging-sw.js'], // 追加のスクリプト (通知イベントハンドラーとか) を読む
     runtimeCaching: [
       {
-        urlPattern: /.+(\/|.html)$/,
-        handler: 'NetworkFirst',
-        options: {
-          cacheName: cacheId + '-html-cache',
-          expiration: {
-            maxAgeSeconds: 60 * 60 * 24 * 1,
-          },
-        },
+        urlPattern: 'index.html',
+        handler: 'NetworkOnly',
       },
       {
         // js をキャッシュしているが、ファイル内容に変更があればビルド時にファイル名が変わるため、アップデートは想定通り行われるはず
