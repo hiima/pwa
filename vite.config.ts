@@ -1,14 +1,56 @@
 import { defineConfig } from "vite";
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react-swc";
+import path from "path";
+
+const distDir = path.join(process.cwd(), "dist");
+const swDest = path.join(distDir, "serviceWorker.js"); // これで FCM の sw.js と被らない
+const cacheId = "oak-app";
 
 const manifest: Partial<VitePWAOptions> = {
   injectRegister: "auto",
   registerType: "prompt",
   workbox: {
     mode: "injectManifest",
-    globPatterns: ["**/*.{js,css,html,svg}"],
-    globIgnores: ["**/node_modules/**/*", "sw.js", "workbox-*.js"],
+    globDirectory: "./dist/",
+    globPatterns: [],
+    // https://qiita.com/masato_makino/items/c85cb01d52632da42c03
+    skipWaiting: true,
+    cacheId,
+    swDest,
+    runtimeCaching: [
+        {
+            urlPattern: /.+(\/|.html)$/,
+            handler: "NetworkFirst",
+            options: {
+                cacheName: cacheId + "-html-cache",
+                expiration: {
+                    maxAgeSeconds: 60 * 60 * 24 * 1,
+                },
+            },
+        },
+      {
+            // js をキャッシュしているが、ファイル内容に変更があればビルド時にファイル名が変わるため、アップデートは想定通り行われるはず
+            urlPattern: /.+\.(js|css|woff)$/,
+            handler: "CacheFirst",
+            options: {
+                cacheName: cacheId + "-dependent-cache",
+                expiration: {
+                    maxAgeSeconds: 60 * 60 * 24 * 90,
+                },
+            },
+        },
+        {
+            urlPattern: /.+\.(png|gif|jpg|jpeg|svg)$/,
+            handler: "CacheFirst",
+            options: {
+                cacheName: cacheId + "-image-cache",
+                expiration: {
+                    maxAgeSeconds: 60 * 60 * 24 * 30,
+                },
+            },
+        },
+    ]
   },
   devOptions: {
     enabled: true,

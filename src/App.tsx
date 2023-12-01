@@ -11,13 +11,16 @@ function App() {
     needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
+    onNeedRefresh() {
+      console.log("New version available");
+      setMessage("New version available");
+    },
     onRegisteredSW(swUrl, registration) {
       setMessage(`SW registration success ${swUrl}`);
       if (registration) {
         // 一定間隔でサービスワーカーファイルの更新をチェックする
         setInterval(async () => {
-          if (!(!registration.installing && navigator)) return;
-          if ("connection" in navigator && !navigator.onLine) return;
+          if (!navigator.onLine) return;
           console.log("check update...");
 
           // 更新があれば needRefresh が　true になる
