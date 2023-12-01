@@ -1,19 +1,16 @@
-import { useState } from "react";
-import { useRegisterSW } from "virtual:pwa-register/react";
-import "./App.css";
+import { useState } from 'react';
+import { useRegisterSW } from 'virtual:pwa-register/react';
+import './App.css';
 
 const intervalMS = 1 * 1000;
 
 function App() {
-  const [message, setMessage] = useState("No message.");
+  const [message, setMessage] = useState('No message.');
 
-  const {
-    needRefresh: [needRefresh],
-    updateServiceWorker,
-  } = useRegisterSW({
+  useRegisterSW({
     onNeedRefresh() {
-      console.log("New version available");
-      setMessage("New version available");
+      console.log('New version available');
+      setMessage('New version available');
     },
     onRegisteredSW(swUrl, registration) {
       setMessage(`SW registration success ${swUrl}`);
@@ -21,7 +18,7 @@ function App() {
         // 一定間隔でサービスワーカーファイルの更新をチェックする
         setInterval(async () => {
           if (!navigator.onLine) return;
-          console.log("check update...");
+          console.log('check update...');
 
           // 更新があれば needRefresh が　true になる
           // 更新がある = ワーカーのスクリプト URL を読み取り、新しいワーカーが現在のワーカーとバイト単位で同一でないと判定される
@@ -34,18 +31,10 @@ function App() {
     },
   });
 
-  const handleOk = async () => {
-    await updateServiceWorker(true);
-    window.location.reload();
-  };
-
   return (
     <>
-      <p>current version is `{import.meta.env.VITE_VERSION ?? "undefined"}`</p>
+      <p>current version is `{import.meta.env.VITE_VERSION ?? 'undefined'}`</p>
       <p>{message}</p>
-      {needRefresh && (
-        <button onClick={handleOk}>ここをクリックして更新してください</button>
-      )}
     </>
   );
 }
